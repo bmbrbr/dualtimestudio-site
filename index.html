@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Dual Time Studio makes small, useful apps between two time zones.">
+<meta property="og:title" content="Dual Time Studio">
+<meta property="og:description" content="Living in two time zones. Small, useful things made between two cities.">
+<meta property="og:url" content="https://dualtimestudio.com/">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#ECEFEA">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Dual Time Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;800&family=Noto+Sans+KR:wght@500;700&family=Noto+Sans+Mono:wght@400;500&display=swap">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<style>
+/* Layout: one column, hero = copy + live GMT watch; works; contact.
+   Day = 백자 (celadon dial, vermilion GMT). Night = 먹 (ink dial, jade GMT, warm lume). Theme follows the viewer's local clock. */
+:root{
+  --bg:#ECEFEA; --surface:#F6F7F3; --fg:#22302A; --muted:#5C6862; --line:#D3DAD2;
+  --accent:#D9573B; --on-accent:#FFFFFF;
+  --dial:#D3DED0; --metal:#B9BEC4; --metal-edge:#9AA0A7; --bezel-ink:#2C2F2D; --ink:#2B3A33;
+  --lume:#F4F0E2; --lume-glow:transparent;
+  --display:"Noto Sans", "Noto Sans KR", system-ui, sans-serif;
+  --body:"Noto Sans", "Noto Sans KR", "Apple SD Gothic Neo", system-ui, sans-serif;
+  --mono:"Noto Sans Mono", ui-monospace, Menlo, monospace;
+}
+:root[data-time="night"]{
+  --bg:#111214; --surface:#191A1D; --fg:#E9E6DE; --muted:#9D9A92; --line:#2B2C30;
+  --accent:#3DBB8F; --on-accent:#0E1A15;
+  --dial:#1C1D20; --metal:#6B6F76; --metal-edge:#4E5157; --bezel-ink:#E6E5E0; --ink:#E9E6DE;
+  --lume:#EFDDB2; --lume-glow:#E8B86699; color-scheme:dark}
+
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.65;transition:background-color .8s, color .8s;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:80px;padding-block:28px 40px}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+svg *{transition:fill .8s, stroke .8s}
+.lume{fill:var(--lume);transition:fill .8s, filter .8s}
+.lume-s{stroke:var(--lume);transition:stroke .8s, filter .8s}
+:root[data-time="night"] .lume, :root[data-time="night"] .lume-s{filter:drop-shadow(0 0 1.6px var(--lume-glow))}
+
+header{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.mark{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.02em}
+.mark svg{width:28px;height:28px;flex:none}
+.right{display:flex;align-items:center;gap:16px}
+.now{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.now b{font-weight:500;color:var(--fg)}
+.modes{display:flex;border:1px solid var(--line);border-radius:999px;padding:2px}
+.modes button{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border:0;border-radius:999px;background:transparent;color:var(--muted);cursor:pointer}
+.modes button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center}
+.hero > div{min-width:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(32px,4.8vw,48px);line-height:1.12;margin:0 0 20px;text-wrap:balance;letter-spacing:-.022em}
+h1 em{font-style:normal;color:var(--accent);transition:color .8s}
+.lede{font-size:16px;line-height:1.6;max-width:27em;margin:0 0 8px}
+.lede + .lede{color:var(--muted)}
+
+.dial{width:100%;max-width:300px;margin:0 auto;aspect-ratio:1}
+.dial svg{width:100%;height:100%;display:block;overflow:visible}
+.legend{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 22px;margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend b{font-weight:500;color:var(--fg)}
+.legend i{width:14px;height:3px;border-radius:2px;display:inline-block}
+
+h2{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500;margin:0 0 20px;
+  padding-bottom:12px;border-bottom:1px solid var(--line)}
+
+.works{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.work{display:flex;flex-direction:column;gap:8px;padding:22px 24px;background:var(--surface);border:1px solid var(--line);border-radius:14px;text-decoration:none;
+  transition:border-color .2s, transform .2s, background-color .8s}
+.work:hover{border-color:var(--accent);transform:translateY(-2px)}
+.work .meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.work h3{font-family:"Noto Sans KR", var(--display);font-weight:700;font-size:21px;margin:2px 0 0;line-height:1.3;letter-spacing:-.01em;display:flex;align-items:baseline;flex-wrap:wrap;gap:0 8px}
+.work h3 small{font-family:var(--mono);font-size:12px;font-weight:400;color:var(--muted);margin-left:8px;letter-spacing:0}
+.work p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+.work .go{margin-top:auto;padding-top:8px;font-family:var(--mono);font-size:12px;color:var(--accent)}
+
+.contact{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center}
+.contact p{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(18px,2.2vw,21px);line-height:1.45;letter-spacing:-.01em;text-wrap:balance;max-width:24em}
+.mail{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.mail code{font-family:var(--mono);font-size:13px;user-select:all;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.mail button{font:500 12px var(--mono);padding:11px 14px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--on-accent);cursor:pointer}
+
+footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--muted);padding-top:18px;border-top:1px solid var(--line)}
+footer nav{display:flex;gap:16px}
+footer a{text-decoration:none}
+footer a:hover{color:var(--accent)}
+
+@media (max-width:720px){
+  .wrap{gap:64px}
+  .hero,.contact,.works{grid-template-columns:1fr}
+  .hero > div:last-child{order:-1}
+  .dial{max-width:240px}
+  .now{display:none}
+}
+@media (prefers-reduced-motion:reduce){body,svg *,.work{transition:none}.work:hover{transform:none}}
+</style>
+<script>document.documentElement.setAttribute('data-time',(function(h){return h<6||h>=18})(new Date().getHours())?'night':'day');</script>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="mark">
+      <svg viewBox="0 0 28 28" aria-hidden="true">
+        <circle cx="14" cy="14" r="13" fill="var(--metal)"/>
+        <circle cx="14" cy="14" r="9.5" fill="var(--dial)" stroke="var(--metal-edge)" stroke-width=".6"/>
+        <g id="lgG"><line x1="14" y1="14" x2="14" y2="7" stroke="var(--accent)" stroke-width="1.2" stroke-linecap="round"/><polygon points="14,5 12.4,8 15.6,8" fill="var(--accent)"/></g>
+        <g id="lgH"><line x1="14" y1="14" x2="14" y2="8.5" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round"/></g>
+        <circle cx="14" cy="14" r="1.3" fill="var(--ink)"/>
+      </svg>
+      Dual Time Studio
+    </div>
+    <div class="right">
+      <div class="now" id="nowline">KST --:-- · PT --:--</div>
+      <div class="modes" role="group" aria-label="Day or night">
+        <button type="button" data-mode="auto" aria-pressed="true">Auto</button>
+        <button type="button" data-mode="day" aria-pressed="false">Day</button>
+        <button type="button" data-mode="night" aria-pressed="false">Night</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Two time zones, one studio</p>
+      <h1>Living in <em>two</em> time zones.</h1>
+      <p class="lede">By day, the work that has to be done. By night, the work we can't stop thinking about.</p>
+      <p class="lede">Between two cities and two clocks, we follow our curiosity and make small, useful things.</p>
+    </div>
+    <div>
+      <div class="dial" role="img" aria-label="Live GMT watch: hour and minute hands show Seoul time, the GMT hand shows Pacific time on the 24-hour bezel">
+        <svg viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="98" fill="var(--metal)" stroke="var(--metal-edge)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="95" fill="none" stroke="var(--metal-edge)" stroke-width=".5" opacity=".6"/>
+          <g id="ticks"></g>
+          <circle cx="100" cy="100" r="75" fill="var(--metal-edge)"/>
+          <circle cx="100" cy="100" r="73" fill="var(--dial)"/>
+          <g id="idx"></g>
+          <g id="gmt"><line x1="100" y1="114" x2="100" y2="40" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"/><polygon points="100,30 94.5,41 105.5,41" fill="var(--accent)"/></g>
+          <g id="hh"><line x1="100" y1="108" x2="100" y2="58" stroke="var(--ink)" stroke-width="5.5" stroke-linecap="round"/><line x1="100" y1="92" x2="100" y2="62" class="lume-s" stroke-width="2.6" stroke-linecap="round"/></g>
+          <g id="mh"><line x1="100" y1="110" x2="100" y2="36" stroke="var(--ink)" stroke-width="3.4" stroke-linecap="round"/><line x1="100" y1="92" x2="100" y2="41" class="lume-s" stroke-width="1.5" stroke-linecap="round"/></g>
+          <g id="sh"><line x1="100" y1="118" x2="100" y2="30" stroke="var(--accent)" stroke-width="1" stroke-linecap="round"/><circle cx="100" cy="46" r="3" class="lume" stroke="var(--accent)" stroke-width="1"/></g>
+          <circle cx="100" cy="100" r="4.5" fill="var(--ink)"/><circle cx="100" cy="100" r="1.8" fill="var(--accent)"/>
+        </svg>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--ink)"></i>Local <b id="kst">--:--</b> KST</span>
+        <span><i style="background:var(--accent)"></i>GMT <b id="pt">--:--</b> PT</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Works</h2>
+    <div class="works">
+      <a class="work" href="https://retujawang.com" target="_blank" rel="noopener">
+        <div class="meta"><span>Web game</span><span>Korean</span></div>
+        <h3>회귀 투자왕<small>Rewind</small></h3>
+        <p>Go back to a random year with ₩100M. Trade six years of real Korean market history and try to beat the KOSPI.</p>
+        <span class="go">retujawang.com →</span>
+      </a>
+      <a class="work" href="https://sutra.dualtimestudio.com" target="_blank" rel="noopener">
+        <div class="meta"><span>Web app</span><span>Korean</span></div>
+        <h3>한줄 불경<small>One Line Sutra</small></h3>
+        <p>One line a day. Copy a Buddhist sutra by hand, or read it aloud, with a verse chosen for how you feel today.</p>
+        <span class="go">sutra.dualtimestudio.com →</span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Contact</h2>
+    <div class="contact">
+      <p>Partnerships, ideas, or just a note on how you use our apps. We'd love to hear from you.</p>
+      <div class="mail">
+        <code id="addr">hello@dualtimestudio.com</code>
+        <button id="copy" type="button">Copy</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Dual Time Studio</span>
+    <nav><a href="privacy.html">Privacy</a><span>Made between two time zones</span></nav>
+  </footer>
+</div>
+
+<script>
+(function(){
+  const NS="http://www.w3.org/2000/svg";
+  const pt=(c,deg,r)=>{const a=(deg-90)*Math.PI/180;return [c+r*Math.cos(a),c+r*Math.sin(a)]};
+  const el=(tag,attrs,parent)=>{const n=document.createElementNS(NS,tag);for(const k in attrs)n.setAttribute(k,attrs[k]);parent.appendChild(n);return n};
+
+  // Metal 24h bezel, 24 at top
+  const g=document.getElementById('ticks');
+  for(let h=0;h<24;h++){
+    const deg=h/24*360;
+    if(h%2===0){const [x,y]=pt(100,deg,85.5);
+      const t=el('text',{x,y,'text-anchor':'middle','dominant-baseline':'central','font-family':'Noto Sans Mono, monospace','font-size':'9.5','font-weight':'500',fill:'var(--bezel-ink)'},g);
+      t.textContent=h===0?'24':String(h);}
+    else{const [x,y]=pt(100,deg,85.5);el('circle',{cx:x,cy:y,r:1.1,fill:'var(--bezel-ink)'},g);}
+  }
+  // Dial: lume plots at the hours, fine minute track
+  const ix=document.getElementById('idx');
+  for(let i=0;i<60;i++){const deg=i*6, hour=i%5===0, big=i%15===0;
+    if(hour){const [x,y]=pt(100,deg,big?62:63.5);el('circle',{cx:x,cy:y,r:big?4.4:3.1,class:'lume',stroke:'var(--ink)','stroke-width':.8},ix);}
+    else{const [a,b]=pt(100,deg,71),[c,d]=pt(100,deg,68);el('line',{x1:a,y1:b,x2:c,y2:d,stroke:'var(--ink)','stroke-width':.6,'stroke-linecap':'round'},ix);}}
+
+  let mode='auto';
+  const applyTime=()=>{const h=new Date().getHours();
+    const night=mode==='night'||(mode==='auto'&&(h<6||h>=18));
+    document.documentElement.setAttribute('data-time',night?'night':'day');};
+  const btns=document.querySelectorAll('.modes button');
+  btns.forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;btns.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));applyTime();}));
+  applyTime(); setInterval(applyTime,60000);
+
+  const parts=(tz)=>{const p=new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
+    return {h:+p.find(x=>x.type==='hour').value%24, m:+p.find(x=>x.type==='minute').value}};
+  const pad=n=>String(n).padStart(2,'0');
+  const rot=(id,deg,c)=>document.getElementById(id).setAttribute('transform',`rotate(${deg} ${c} ${c})`);
+  const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let k,p,lastSec=-1;
+  function frame(){
+    const now=Date.now(), s=(now/1000)%60, sec=Math.floor(s);
+    if(sec!==lastSec){lastSec=sec;k=parts('Asia/Seoul');p=parts('America/Los_Angeles');
+      document.getElementById('kst').textContent=pad(k.h)+':'+pad(k.m);
+      document.getElementById('pt').textContent=pad(p.h)+':'+pad(p.m);
+      const dn=t=>(t.h>=6&&t.h<18)?'day':'night';
+      document.getElementById('nowline').innerHTML=`KST <b>${pad(k.h)}:${pad(k.m)}</b> ${dn(k)} · PT <b>${pad(p.h)}:${pad(p.m)}</b> ${dn(p)}`;}
+    const ss=reduce?sec:s, m=k.m+ss/60, hk=(k.h%12)+m/60, gp=p.h+(p.m+ss/60)/60;
+    const H=hk/12*360, M=m/60*360, S=ss/60*360, G=gp/24*360;
+    rot('hh',H,100);rot('mh',M,100);rot('sh',S,100);rot('gmt',G,100);
+    rot('lgH',H,14);rot('lgG',G,14);
+    if(reduce) setTimeout(frame,1000-(now%1000)); else requestAnimationFrame(frame);
+  }
+  frame();
+
+  const btn=document.getElementById('copy');
+  btn.addEventListener('click',()=>{const v=document.getElementById('addr').textContent;
+    const done=()=>{btn.textContent='Copied';setTimeout(()=>btn.textContent='Copy',1600)};
+    const sel=()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('addr'));const s=getSelection();s.removeAllRanges();s.addRange(r)};
+    try{navigator.clipboard.writeText(v).then(done,sel);}catch(e){sel()}
+  });
+})();
+</script>
+</body>
+</html>
