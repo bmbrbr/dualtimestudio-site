@@ -75,7 +75,10 @@ h1 em{font-style:normal;color:var(--accent);transition:color .8s}
 h2{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500;margin:0 0 20px;
   padding-bottom:12px;border-bottom:1px solid var(--line)}
 
-.works{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.works{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.work.soon{border-style:dashed;background:transparent}
+.work.soon:hover{border-color:var(--line);transform:none}
+.work.soon .go{color:var(--muted)}
 .work{display:flex;flex-direction:column;gap:8px;padding:22px 24px;background:var(--surface);border:1px solid var(--line);border-radius:14px;text-decoration:none;
   transition:border-color .2s, transform .2s, background-color .8s}
 .work:hover{border-color:var(--accent);transform:translateY(-2px)}
@@ -99,7 +102,7 @@ footer a:hover{color:var(--accent)}
 
 @media (max-width:720px){
   .wrap{gap:64px}
-  .hero,.contact,.works{grid-template-columns:1fr}
+  .hero,.contact{grid-template-columns:1fr}
   .hero > div:last-child{order:-1}
   .dial{max-width:240px}
   .now{display:none}
@@ -174,9 +177,15 @@ footer a:hover{color:var(--accent)}
       <a class="work" href="https://sutra.dualtimestudio.com" target="_blank" rel="noopener">
         <div class="meta"><span>Web app</span><span>Korean</span></div>
         <h3>한줄 불경<small>One Line Sutra</small></h3>
-        <p>One line a day. Copy a Buddhist sutra by hand, or read it aloud, with a verse chosen for how you feel today.</p>
+        <p>One line a day. Write out a Buddhist sutra or read it aloud, with a verse chosen for how you feel today.</p>
         <span class="go">sutra.dualtimestudio.com →</span>
       </a>
+      <div class="work soon">
+        <div class="meta"><span>Habit app</span><span>Coming soon</span></div>
+        <h3>루티멀<small>Routimal</small></h3>
+        <p>Keep your daily routines and raise a little red panda that grows with them.</p>
+        <span class="go">In testing</span>
+      </div>
     </div>
   </section>
 
