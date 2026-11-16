@@ -76,6 +76,10 @@ h2{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:up
   padding-bottom:12px;border-bottom:1px solid var(--line)}
 
 .works{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.work .head{display:flex;align-items:center;gap:14px}
+.work .icon{width:52px;height:52px;border-radius:12px;flex:none;display:block;box-shadow:0 0 0 1px var(--line)}
+.work .head > div{min-width:0;display:flex;flex-direction:column;gap:2px}
+.works .wide{grid-column:1 / -1}
 .work{position:relative;display:flex;flex-direction:column;gap:8px;padding:22px 24px;background:var(--surface);border:1px solid var(--line);border-radius:14px;
   transition:border-color .2s, transform .2s, background-color .8s}
 .work:hover{border-color:var(--accent);transform:translateY(-2px)}
@@ -174,27 +178,33 @@ footer a:hover{color:var(--accent)}
     <div class="works">
       <article class="work">
         <div class="meta"><span>Web game · Korean</span><span class="status live">Live</span></div>
-        <h3>Rewind<small>회귀 투자왕</small></h3>
+        <div class="head"><img class="icon" src="icons/rewind.png" alt="" width="52" height="52" loading="lazy"><h3>Rewind<small>회귀 투자왕</small></h3></div>
         <p>Go back to a random year with ₩100M. Trade six years of real Korean market history, beat the KOSPI, and climb the monthly hall of fame.</p>
         <div class="go"><a class="main" href="https://retujawang.com/?from=studio" target="_blank" rel="noopener">retujawang.com →</a><a class="sub" href="https://www.youtube.com/@%ED%9A%8C%EA%B7%80%ED%88%AC%EC%9E%90%EC%99%95" target="_blank" rel="noopener">YouTube</a><a class="sub" href="https://www.instagram.com/retujawang/" target="_blank" rel="noopener">Instagram</a></div>
       </article>
       <article class="work">
         <div class="meta"><span>Web app · Korean</span><span class="status live">Live · Android soon</span></div>
-        <h3>One Line Sutra<small>한줄 불경</small></h3>
+        <div class="head"><img class="icon" src="icons/sutra.png" alt="" width="52" height="52" loading="lazy"><h3>One Line Sutra<small>한줄 불경</small></h3></div>
         <p>One line a day. Write out a Buddhist sutra or read it aloud, with a verse chosen for how you feel today.</p>
         <div class="go"><a class="main" href="https://sutra.dualtimestudio.com/?from=studio" target="_blank" rel="noopener">sutra.dualtimestudio.com →</a></div>
       </article>
       <article class="work">
         <div class="meta"><span>Habit app · Korean</span><span class="status">Beta</span></div>
-        <h3>Routimal<small>루티멀</small></h3>
+        <div class="head"><img class="icon" src="icons/routimal.png" alt="" width="52" height="52" loading="lazy"><h3>Routimal<small>루티멀</small></h3></div>
         <p>Check off your daily routines and a little red panda hatches, eats, and grows up with you.</p>
         <div class="go"><a class="main" href="https://routimal.dualtimestudio.com/?from=studio" target="_blank" rel="noopener">routimal.dualtimestudio.com →</a></div>
       </article>
       <article class="work">
         <div class="meta"><span>Diet app · Korean</span><span class="status">Beta</span></div>
-        <h3>Yumpire<small>먹어말어</small></h3>
+        <div class="head"><img class="icon" src="icons/yumpire.png" alt="" width="52" height="52" loading="lazy"><h3>Yumpire<small>먹어말어</small></h3></div>
         <p>Snap your food before you eat. A little referee tells you how much of it fits your goal today, and where to stop.</p>
         <div class="go"><a class="main" href="https://yumpire.dualtimestudio.com/?from=studio" target="_blank" rel="noopener">yumpire.dualtimestudio.com →</a></div>
+      </article>
+      <article class="work wide">
+        <div class="meta"><span>Family learning · Korean</span><span class="status">Beta</span></div>
+        <div class="head"><img class="icon" src="icons/geosil.svg" alt="" width="52" height="52" loading="lazy"><h3>Living Room School<small>거실학교</small></h3></div>
+        <p>Instead of another YouTube video, short lessons kids do together with mom and dad at home. Started by a dad of two at the dinner table.</p>
+        <div class="go"><a class="main" href="https://geosil.dualtimestudio.com/?from=studio" target="_blank" rel="noopener">geosil.dualtimestudio.com →</a></div>
       </article>
     </div>
   </section>
